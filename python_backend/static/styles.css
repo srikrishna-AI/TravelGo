@@ -1,0 +1,149 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #fdf6e3 0%, #f8fafc 100%);
+  margin: 0;
+  padding: 0;
+}
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fffbe6;
+  padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
+}
+.brand-logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #e67e22;
+  letter-spacing: 1px;
+}
+.signin-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.signin-form {
+  display: flex;
+  gap: 0.5rem;
+}
+.signin-form input {
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  font-size: 1rem;
+  background: #fff;
+}
+.signin-form button {
+  background: #e67e22;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.signin-form button:hover {
+  background: #d35400;
+}
+#loginMessage {
+  font-size: 0.95rem;
+  margin-top: 0.2rem;
+  min-height: 1.2em;
+}
+.landing-hero {
+  background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+  color: #fff;
+  text-align: center;
+  padding: 4rem 2rem 3rem 2rem;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  box-shadow: 0 4px 24px rgba(246,211,101,0.08);
+}
+.landing-hero h1 {
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+}
+.landing-hero .brand {
+  color: #fffbe6;
+  font-weight: bold;
+}
+.landing-hero .subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #fffbe6;
+}
+.cta-btn {
+  display: inline-block;
+  background: #e67e22;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.9rem 2.2rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(230,126,34,0.12);
+  transition: background 0.2s;
+}
+.cta-btn:hover {
+  background: #d35400;
+}
+.container {
+  max-width: 420px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 2.5rem 2rem 2rem 2rem;
+}
+h1, h2 {
+  text-align: center;
+  color: #e67e22;
+}
+input, button {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+}
+button {
+  background: #e67e22;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+button:hover {
+  background: #d35400;
+}
+#results, #bookingsResults {
+  margin-top: 1rem;
+}
+.result-card {
+  background: #fdf6e3;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.loader {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #e67e22;
+  border-radius: 50%;
+  border-top: 3px solid #fff;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

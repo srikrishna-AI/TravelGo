@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TravelGo</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <style>
+      body {
+        min-height: 100vh;
+        background: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+      }
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(24,28,40,0.55);
+        z-index: 0;
+      }
+      .glass-card {
+        background: rgba(255,255,255,0.18);
+        box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 1.2rem;
+        border: 1px solid rgba(255,255,255,0.25);
+        z-index: 1;
+      }
+      .header-bar {
+        z-index: 2;
+        position: relative;
+        margin:1.5rem auto 0 auto; max-width:900px; padding:1.2rem 2.5rem;
+        display:flex; justify-content:space-between; align-items:center;
+        background: rgba(255,255,255,0.10);
+      }
+      .brand-logo {
+        letter-spacing: 2px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-size: 2.2rem;
+        color: #fff;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      }
+      .login-btn, .logout-btn {
+        background: #e67e22;
+        color: #fff;
+        font-weight: bold;
+        padding: 0.6rem 1.5rem;
+        border-radius: 999px;
+        font-size: 1rem;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .login-btn:hover, .logout-btn:hover { background: #d35400ba; }
+      .user-greet { color: #fff; font-weight: 500; margin-right: 1rem; }
+      .landing-hero {
+        background: none;
+        color: #fff;
+        text-align: center;
+        padding: 4rem 2rem 2rem 2rem;
+        border-radius: 2rem;
+        box-shadow: none;
+      }
+      .cta-btn {
+        background: #e67e22;
+        color: #fff;
+        font-weight: bold;
+        padding: 1rem 2.5rem;
+        border-radius: 999px;
+        font-size: 1.2rem;
+        box-shadow: 0 2px 8px rgba(230,126,34,0.18);
+        border: none;
+        transition: background 0.2s;
+        margin-top: 1.5rem;
+      }
+      .cta-btn:hover { background: #d35400; }
+      .main-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        align-items: flex-start;
+        margin-top: 2.5rem;
+      }
+      .module-card {
+        min-width: 320px;
+        max-width: 500px;
+        flex: 1 1 340px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 1.5rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .module-title {
+        color: #e67e22;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        letter-spacing: 1px;
+      }
+      .result-card {
+  background: rgba(255,255,255,0.92);
+  border-radius: 1.1rem;
+  padding: 1.2rem 1.1rem 1.1rem 1.1rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 18px 0 rgba(31,38,135,0.10);
+  color: #222;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid #f6d365;
+  position: relative;
+}
+.result-card:hover {
+  box-shadow: 0 8px 32px 0 #e67e2240;
+  transform: translateY(-2px) scale(1.01);
+}
+.result-card b {
+  color: #e67e22;
+  font-size: 1.08rem;
+}
+.result-card .live-badge {
+  margin-left: 0.7rem;
+}
+.result-card .badge-row {
+  margin-bottom: 0.3rem;
+}
+.result-card button.pay-btn {
+  margin-top: 0.7rem;
+  background: linear-gradient(90deg,#e67e22,#f6d365);
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1.5rem;
+  font-size: 1.05rem;
+  box-shadow: 0 2px 8px #e67e2240;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.result-card button.pay-btn:hover {
+  background: linear-gradient(90deg,#f6d365,#e67e22);
+  color: #fff;
+}
+/* Payment modal tabs */
+.pay-tabs {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 1.1rem;
+  justify-content: center;
+}
+.pay-tab {
+  flex: 1 1 0;
+  background: #f6d36522;
+  color: #e67e22;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.05rem;
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.pay-tab.active, .pay-tab:hover {
+  background: #e67e22;
+  color: #fff;
+}
+.pay-option {
+  display: none;
+}
+.pay-option.active {
+  display: block;
+}
+#previewTicketBtn {
+  margin-top: 0.7rem;
+  background: #fff;
+  color: #e67e22;
+  border: 1.5px solid #e67e22;
+  font-weight: bold;
+  border-radius: 999px;
+  padding: 0.6rem 1.5rem;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#previewTicketBtn:hover {
+  background: #e67e22;
+  color: #fff;
+}
+      @media (max-width: 900px) {
+        .main-flex { flex-direction: column; gap: 1.5rem; }
+        .module-card { max-width: 98vw; }
+      }
+      .live-badge {
+  display: inline-block;
+  background: #27ae60;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 0.2rem 0.7rem;
+  margin-left: 0.5rem;
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 #27ae6040; }
+  70% { box-shadow: 0 0 0 8px #27ae6000; }
+  100% { box-shadow: 0 0 0 0 #27ae6000; }
+}
+.flash {
+  animation: flash-bg 0.7s;
+}
+@keyframes flash-bg {
+  0% { background: #fffbe6; }
+  100% { background: transparent; }
+}
+.badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 0.15rem 0.6rem;
+  margin-left: 0.4rem;
+}
+.badge-last {
+  background: #c0392b;
+  color: #fff;
+}
+.badge-drop {
+  background: #27ae60;
+  color: #fff;
+}
+.badge-sold {
+  background: #e67e22;
+  color: #fff;
+}
+#activityFeed {
+  position: fixed;
+  top: 5.5rem;
+  right: 1.2rem;
+  width: 320px;
+  max-width: 90vw;
+  z-index: 10002;
+  background: rgba(24,28,40,0.92);
+  color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  padding: 1rem 1.2rem 0.5rem 1.2rem;
+  font-size: 0.98rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  display: none;
+}
+#activityFeed.active { display: block; }
+/* Modal background and card for login/register */
+.modal-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(24,28,40,0.72);
+  z-index: 10050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+  padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+  max-width: 370px;
+  width: 95vw;
+  position: relative;
+  z-index: 10051;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  background: #eee;
+  border: none;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10052;
+}
+#paymentModal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(24,28,40,0.72);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.payment-card {
+  background: #fff;
+  border-radius: 1.3rem;
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+  padding: 2.5rem 1.7rem 1.7rem 1.7rem;
+  max-width: 400px;
+  width: 96vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1.5px solid #f6d365;
+  animation: fadeInUp 0.4s;
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.payment-title {
+  color: #e67e22;
+  text-align: center;
+  font-size: 1.45rem;
+  font-weight: bold;
+  margin-bottom: 0.7rem;
+  letter-spacing: 1px;
+}
+.payment-method-label {
+  color: #222;
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  margin-top: 0.2rem;
+  letter-spacing: 0.5px;
+  text-align: left;
+  width: 100%;
+}
+.pay-tabs {
+  display: flex;
+  gap: 0.7rem;
+  margin-bottom: 1.1rem;
+  justify-content: center;
+  width: 100%;
+}
+.pay-tab {
+  flex: 1 1 0;
+  background: #f6d36522;
+  color: #e67e22;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.05rem;
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.pay-tab.active, .pay-tab:hover {
+  background: #e67e22;
+  color: #fff;
+}
+.pay-option {
+  display: none;
+}
+.pay-option.active {
+  display: block;
+}
+@media (max-width: 600px) {
+  .payment-card { padding: 1.2rem 0.5rem 1.2rem 0.5rem; }
+  .payment-title { font-size: 1.1rem; }
+  .pay-tabs { gap: 0.3rem; }
+}
+      /* ...existing code... */
+    </style>
+  </head>
+  <body>
+    <header class="header-bar glass-card">
+      <div class="brand-logo">TravelGo</div>
+      <div id="userArea">
+        <button class="login-btn" id="openLoginBtn">Login</button>
+      </div>
+    </header>
+    <div class="landing-hero">
+      <h1 style="font-size:2.8rem; margin-bottom:0.5rem; letter-spacing:-1px;">Welcome to <span class="brand">TravelGo</span></h1>
+      <p class="subtitle" style="font-size:1.2rem; margin-bottom:2rem; color:#fffbe6;">Book your next adventure in seconds. Real-time search, instant booking, and more!</p>
+    </div>
+    <div id="main-app" class="main-flex">
+      <!-- Search & Booking Module -->
+      <div class="module-card glass-card">
+        <div class="module-title">Find Your Trip</div>
+        <!-- Add transport toggle UI above the form -->
+        <div id="transportToggle" style="display:flex;gap:1rem;justify-content:center;margin-bottom:1.2rem;">
+          <button type="button" class="toggle-btn active" data-type="bus">Bus</button>
+          <button type="button" class="toggle-btn" data-type="train">Train</button>
+          <button type="button" class="toggle-btn" data-type="air">Air</button>
+        </div>
+        <form id="searchForm" class="glass-form">
+          <input type="text" id="from_city" placeholder="From city" required />
+          <input type="text" id="to_city" placeholder="To city" required />
+          <input type="date" id="travel_date" required />
+          <button type="submit">Search</button>
+        </form>
+        <div id="results"></div>
+      </div>
+    </div>
+    <!-- Modal for Login/Register -->
+    <div id="loginModal" class="modal-bg" style="display:none;">
+      <div class="modal-card">
+        <button class="modal-close" id="closeLoginModal">&times;</button>
+        <div class="modal-tabs">
+          <button class="modal-tab active" id="tabLogin">Login</button>
+          <button class="modal-tab" id="tabRegister">Register</button>
+        </div>
+        <form id="loginFormModal" class="glass-form">
+          <input type="email" id="login_email" placeholder="Email" required />
+          <input type="password" id="login_password" placeholder="Password" required />
+          <button type="submit">Sign In</button>
+        </form>
+        <form id="registerFormModal" class="glass-form" style="display:none;">
+          <input type="email" id="register_email" placeholder="Email" required />
+          <input type="password" id="register_password" placeholder="Password" required />
+          <input type="text" id="register_firstname" placeholder="First Name" required />
+          <input type="text" id="register_lastname" placeholder="Last Name" required />
+          <button type="submit">Register</button>
+        </form>
+        <div id="loginModalMessage" style="text-align:center;"></div>
+      </div>
+    </div>
+    <!-- Modal for Payment -->
+    <div id="paymentModal" style="display:none;">
+      <div class="payment-card">
+        <button id="closePayModal" class="modal-close" style="position:absolute;top:1rem;right:1.2rem;background:#eee;border:none;border-radius:50%;width:2rem;height:2rem;font-size:1.2rem;cursor:pointer;">&times;</button>
+        <div class="payment-title">Payment</div>
+        <div id="payDetails" style="text-align:center;margin-bottom:1rem;"></div>
+        <div class="payment-method-label">Payment Method</div>
+        <div class="pay-tabs">
+          <button type="button" class="pay-tab active" data-pay="card">Card</button>
+          <button type="button" class="pay-tab" data-pay="upi">UPI</button>
+          <button type="button" class="pay-tab" data-pay="netbank">Net Banking</button>
+          <button type="button" class="pay-tab" data-pay="wallet">Wallet</button>
+        </div>
+        <form id="payForm" style="width:100%;">
+          <div class="pay-option active" data-pay="card">
+            <input type="text" id="payName" placeholder="Name on Card" required style="width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;">
+            <input type="text" id="payCard" placeholder="Card Number" required maxlength="16" style="width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;">
+          </div>
+          <div class="pay-option" data-pay="upi">
+            <input type="text" id="payUpi" placeholder="UPI ID (e.g. user@upi)" style="width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;">
+          </div>
+          <div class="pay-option" data-pay="netbank">
+            <input type="text" id="payBank" placeholder="Bank Name" style="width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;">
+            <input type="text" id="payAcc" placeholder="Account Number" style="width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;">
+          </div>
+          <div class="pay-option" data-pay="wallet">
+            <input type="text" id="payWallet" placeholder="Wallet ID / Mobile" style="width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;">
+          </div>
+          <button type="submit" style="width:100%;background:#e67e22;color:#fff;font-weight:bold;padding:0.7rem 0;border:none;border-radius:999px;font-size:1.1rem;margin-top:0.5rem;">Pay</button>
+          <button type="button" id="previewTicketBtn" style="width:100%;background:#fff;color:#e67e22;border:1.5px solid #e67e22;font-weight:bold;border-radius:999px;padding:0.6rem 1.5rem;font-size:1.05rem;margin-top:0.5rem;">Preview Ticket</button>
+        </form>
+        <div id="payMsg" style="text-align:center;margin-top:0.7rem;"></div>
+      </div>
+    </div>
+    <div id="activityFeed"></div>
+    <script src="/static/app.js"></script>
+    <script>
+      // Modal logic
+      const loginModal = document.getElementById('loginModal');
+      const openLoginBtn = document.getElementById('openLoginBtn');
+      const closeLoginModal = document.getElementById('closeLoginModal');
+      const tabLogin = document.getElementById('tabLogin');
+      const tabRegister = document.getElementById('tabRegister');
+      const loginFormModal = document.getElementById('loginFormModal');
+      const registerFormModal = document.getElementById('registerFormModal');
+      const loginModalMessage = document.getElementById('loginModalMessage');
+      let currentUser = null;
+      openLoginBtn.onclick = () => { loginModal.style.display = 'flex'; loginModalMessage.textContent = ''; };
+      closeLoginModal.onclick = () => { loginModal.style.display = 'none'; };
+      tabLogin.onclick = () => {
+        tabLogin.classList.add('active'); tabRegister.classList.remove('active');
+        loginFormModal.style.display = 'block'; registerFormModal.style.display = 'none'; loginModalMessage.textContent = '';
+      };
+      tabRegister.onclick = () => {
+        tabRegister.classList.add('active'); tabLogin.classList.remove('active');
+        loginFormModal.style.display = 'none'; registerFormModal.style.display = 'block'; loginModalMessage.textContent = '';
+      };
+      // Login
+      loginFormModal.onsubmit = async (e) => {
+        e.preventDefault();
+        loginModalMessage.textContent = 'Logging in...';
+        const email = document.getElementById('login_email').value;
+        const password = document.getElementById('login_password').value;
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+        const res = await fetch('/login', { method: 'POST', body: formData });
+        if (res.ok) {
+          const data = await res.json().catch(()=>({}));
+          currentUser = data.first_name || email;
+          document.getElementById('userArea').innerHTML = `<span class='user-greet'>Welcome, ${currentUser}!</span><button class='logout-btn' id='logoutBtn'>Logout</button>`;
+          loginModal.style.display = 'none';
+        } else {
+          loginModalMessage.innerHTML = `<span class='error-msg'>Not a valid user. Please check your credentials.</span>`;
+        }
+      };
+      // Register
+      registerFormModal.onsubmit = async (e) => {
+        e.preventDefault();
+        loginModalMessage.textContent = 'Registering...';
+        const email = document.getElementById('register_email').value;
+        const password = document.getElementById('register_password').value;
+        const first_name = document.getElementById('register_firstname').value;
+        const last_name = document.getElementById('register_lastname').value;
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('first_name', first_name);
+        formData.append('last_name', last_name);
+        // Register user in DB
+        const res = await fetch('/register', { method: 'POST', body: formData });
+        if (res.ok) {
+          loginModalMessage.innerHTML = `<span class='success-msg'>Hi ${first_name}, your account has been created! Please login.</span>`;
+          tabLogin.click();
+        } else {
+          const err = await res.json().catch(()=>({}));
+          loginModalMessage.innerHTML = `<span class='error-msg'>${err.detail || 'Registration failed.'}</span>`;
+        }
+      };
+      // Logout
+      document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'logoutBtn') {
+          currentUser = null;
+          document.getElementById('userArea').innerHTML = `<button class='login-btn' id='openLoginBtn'>Login</button>`;
+          document.getElementById('openLoginBtn').onclick = openLoginBtn.onclick;
+        }
+      });
+      // --- Toast notification utility ---
+      function showToast(msg, type = 'info') {
+        let toast = document.getElementById('toastMsg');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'toastMsg';
+          toast.style.position = 'fixed';
+          toast.style.bottom = '2.5rem';
+          toast.style.left = '50%';
+          toast.style.transform = 'translateX(-50%)';
+          toast.style.background = type === 'success' ? '#27ae60' : (type === 'error' ? '#c0392b' : '#e67e22');
+          toast.style.color = '#fff';
+          toast.style.padding = '1rem 2.2rem';
+          toast.style.borderRadius = '999px';
+          toast.style.fontWeight = 'bold';
+          toast.style.fontSize = '1.1rem';
+          toast.style.zIndex = 9999;
+          toast.style.boxShadow = '0 2px 12px rgba(0,0,0,0.12)';
+          document.body.appendChild(toast);
+        }
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 2600);
+      }
+      // --- Real-time Activity Feed ---
+      function addActivity(msg, type = 'info') {
+        const feed = document.getElementById('activityFeed');
+        if (!feed) return;
+        const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+        const color = type === 'success' ? '#27ae60' : (type === 'error' ? '#c0392b' : '#e67e22');
+        const el = document.createElement('div');
+        el.innerHTML = `<span style='color:${color};font-weight:bold;'>[${time}]</span> ${msg}`;
+        feed.prepend(el);
+        feed.classList.add('active');
+        if (feed.childNodes.length > 12) feed.removeChild(feed.lastChild);
+      }
+      // --- Real-time WebSocket connection ---
+      const ws = new WebSocket('ws://localhost:8000/ws');
+      ws.onopen = () => { console.log('WebSocket connected'); addActivity('Connected to real-time updates', 'success'); };
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'booking_update') {
+          showToast('New booking: ' + data.booking.destination + ' for ' + data.booking.email, 'success');
+          const resultsDiv = document.getElementById('results');
+          if (resultsDiv) {
+            const el = document.createElement('div');
+            el.className = 'result-card';
+            el.innerHTML = `<b>New Booking:</b> ${data.booking.destination} for ${data.booking.email}`;
+            resultsDiv.prepend(el);
+          }
+        } else if (data.type === 'travel_offer') {
+          showToast('New travel offer: ' + data.travel.from + ' → ' + data.travel.to, 'info');
+          const resultsDiv = document.getElementById('results');
+          if (resultsDiv) {
+            const el = document.createElement('div');
+            el.className = 'result-card';
+            el.innerHTML = `<b>Travel:</b> ${data.travel.from} → ${data.travel.to} on ${data.travel.date} <br>Price: ₹${data.travel.price}`;
+            resultsDiv.prepend(el);
+          }
+        } else if (data.type === 'hotel_offer') {
+          showToast('New hotel offer: ' + data.hotel.name + ' in ' + data.hotel.city, 'info');
+          const resultsDiv = document.getElementById('results');
+          if (resultsDiv) {
+            // Try to update hotel card if exists, else prepend
+            let hotelCard = resultsDiv.querySelector(`.result-card[data-hotel-id="${data.hotel.id}"]`);
+            const hotelImg = data.hotel.image || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80';
+            const cardHtml = `<div class='result-card' data-hotel-id='${data.hotel.id}'>
+  <b>${data.hotel.name}</b> <br>
+  ₹${data.hotel.price} <br>
+  <img src='${hotelImg}' alt='hotel' style='width:100%;max-width:180px;border-radius:8px;margin-top:6px;'>
+</div>`;
+            if (hotelCard) {
+              hotelCard.outerHTML = cardHtml;
+            } else {
+              const el = document.createElement('div');
+              el.innerHTML = cardHtml;
+              resultsDiv.prepend(el.firstChild);
+            }
+          }
+        } else if (data.type === 'bus_realtime' || data.type === 'train_realtime' || data.type === 'air_realtime') {
+          const { id, seats, price, last_seat, price_drop, sold_out } = data;
+          const ttype = data.type.replace('_realtime','');
+          const cards = document.querySelectorAll(`.result-card[data-type="${ttype}"][data-id]`);
+          cards.forEach(card => {
+            if (card.getAttribute('data-id') === id) {
+              // Animate seat/price changes
+              const seatSpan = card.querySelector('.seats-info');
+              const priceSpan = card.querySelector('.price-info');
+              if (seatSpan) { seatSpan.textContent = `Seats: ${seats}`; seatSpan.classList.add('flash'); setTimeout(()=>seatSpan.classList.remove('flash'), 700); }
+              if (priceSpan) { priceSpan.textContent = `₹${price}`; priceSpan.classList.add('flash'); setTimeout(()=>priceSpan.classList.remove('flash'), 700); }
+              // Badges
+              let badgeHtml = `<span class='live-badge'>Live</span>`;
+              if (last_seat) badgeHtml += `<span class='badge badge-last'>Last seat!</span>`;
+              if (price_drop) badgeHtml += `<span class='badge badge-drop'>Price dropped!</span>`;
+              if (sold_out) badgeHtml += `<span class='badge badge-sold'>Sold out</span>`;
+              let badgeDiv = card.querySelector('.badge-row');
+              if (!badgeDiv) {
+                badgeDiv = document.createElement('div');
+                badgeDiv.className = 'badge-row';
+                card.insertBefore(badgeDiv, card.firstChild.nextSibling);
+              }
+              badgeDiv.innerHTML = badgeHtml;
+              // Remove card if sold out
+              if (sold_out) {
+                setTimeout(()=>{ card.remove(); addActivity(`${ttype.charAt(0).toUpperCase()+ttype.slice(1)} ${id} sold out!`, 'error'); }, 900);
+              }
+              // Activity feed
+              if (last_seat) addActivity(`${ttype.charAt(0).toUpperCase()+ttype.slice(1)} ${id}: Last seat!`, 'error');
+              if (price_drop) addActivity(`${ttype.charAt(0).toUpperCase()+ttype.slice(1)} ${id}: Price dropped!`, 'success');
+              if (!last_seat && !price_drop && !sold_out) addActivity(`${ttype.charAt(0).toUpperCase()+ttype.slice(1)} ${id}: Seats/price updated.`, 'info');
+            }
+          });
+          return;
+        }
+      };
+      ws.onerror = (e) => showToast('WebSocket error', 'error');
+      ws.onclose = () => showToast('WebSocket closed', 'error');
+      // --- Transport toggle and search ---
+      let selectedTransport = 'bus';
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.onclick = function() {
+          document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          selectedTransport = this.getAttribute('data-type');
+          document.getElementById('results').innerHTML = '';
+          if (window.pollInterval) clearInterval(window.pollInterval);
+        };
+      });
+
+      // --- Real-time search for buses, trains, air, and hotels ---
+      window.pollInterval = null;
+      document.getElementById('searchForm').onsubmit = async function(e) {
+        e.preventDefault();
+        const from = document.getElementById('from_city').value.trim();
+        const to = document.getElementById('to_city').value.trim();
+        const date = document.getElementById('travel_date').value;
+        if (!from || !to || !date) return;
+        // Show loading spinner
+        document.getElementById('results').innerHTML = '<div style="text-align:center;padding:1.5rem;"><span class="loader" style="display:inline-block;width:32px;height:32px;border:4px solid #e67e22;border-top:4px solid #fff;border-radius:50%;animation:spin 1s linear infinite;"></span> <span style="color:#e67e22;font-weight:bold;">Searching...</span></div>';
+        async function fetchAndDisplay() {
+          let html = '';
+          let transportLabel = '';
+          let transportData = [];
+          let transportType = selectedTransport;
+          if (transportType === 'bus') {
+            transportLabel = 'Buses';
+            const res = await fetch(`/buses?city=${encodeURIComponent(to)}`);
+            const data = await res.json();
+            transportData = (data.buses || []).map((b, i) => ({
+              id: b.id || String(i),
+              name: b.operator,
+              time: `${b.departure} → ${b.arrival}`,
+              price: b.price,
+              seats: b.seats || Math.floor(Math.random()*30+10),
+              image: i % 2 === 0 ? 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80' : 'https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=600&q=80',
+              type: 'bus'
+            }));
+          } else if (transportType === 'train') {
+            transportLabel = 'Trains';
+            transportData = [
+              {
+                id: 'rajdhani',
+                name: 'Rajdhani Express',
+                time: '09:00 → 18:00',
+                price: 1800,
+                seats: 40,
+                image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&q=80',
+                type: 'train'
+              },
+              {
+                id: 'shatabdi',
+                name: 'Shatabdi Express',
+                time: '15:00 → 23:00',
+                price: 1600,
+                seats: 32,
+                image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80',
+                type: 'train'
+              }
+            ];
+          } else if (transportType === 'air') {
+            transportLabel = 'Flights';
+            transportData = [
+              {
+                id: 'indigo6e123',
+                name: 'IndiGo 6E-123',
+                time: '07:00 → 09:30',
+                price: 4200,
+                seats: 12,
+                image: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?auto=format&fit=crop&w=600&q=80',
+                type: 'air'
+              },
+              {
+                id: 'ai456',
+                name: 'Air India AI-456',
+                time: '18:00 → 20:30',
+                price: 4800,
+                seats: 8,
+                image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+                type: 'air'
+              }
+            ];
+          }
+          html += `<h3 style=\"color:#e67e22;\">${transportLabel} to ${to}</h3>`;
+          if (transportData.length) {
+            transportData.forEach(t => {
+              // Extra info for each travel type
+              let extra = '';
+              if (t.type === 'bus') extra = `<div style='font-size:0.97rem;color:#555;'>Duration: 8h<br>AC Sleeper<br>Amenities: WiFi, Water, Charging</div>`;
+              if (t.type === 'train') extra = `<div style='font-size:0.97rem;color:#555;'>Class: 2A<br>Duration: 9h<br>Amenities: Pantry, Bedding</div>`;
+              if (t.type === 'air') extra = `<div style='font-size:0.97rem;color:#555;'>Class: Economy<br>Duration: 2.5h<br>Amenities: Meal, Entertainment</div>`;
+              html += `<div class=\"result-card\" data-type=\"${t.type}\" data-id=\"${t.id}\">\n  <b>${t.name}</b> <span class='live-badge'>Live</span> <br>\n  <div class='badge-row'></div>\n  ${t.time} <br>\n  <span class=\"price-info\">₹${t.price}</span> <br>\n  <span class=\"seats-info\">Seats: ${t.seats}</span> <br>\n  ${extra}\n  <button class=\"pay-btn\" data-type=\"${t.type}\" data-id=\"${t.id}\" data-name=\"${t.name}\" data-price=\"${t.price}\" data-time=\"${t.time}\" data-seats=\"${t.seats}\">Select</button>\n</div>`;
+            });
+          } else {
+            html += `<div class=\"result-card\">No ${transportLabel.toLowerCase()} found.</div>`;
+          }
+          // Hotels always shown
+          const hotelRes = await fetch(`/hotels?city=${encodeURIComponent(to)}`);
+          const hotelData = await hotelRes.json();
+          html += `<h3 style=\"color:#e67e22;\">Hotels in ${to}</h3>`;
+          if (hotelData.hotels && hotelData.hotels.length) {
+            hotelData.hotels.forEach((h, i) => {
+              // Extra info for hotels
+              const rating = h.rating || (4 + (i % 2) * 0.5);
+              const address = h.address || `${to} City Center`;
+              const amenities = h.amenities || 'Free WiFi, Breakfast, Pool';
+              html += `<div class=\"result-card\" data-hotel-id=\"${h.id||i}\">\n  <b>${h.name}</b> <span style='color:#e67e22;font-size:0.95rem;'>★${rating}</span> <br>\n  ₹${h.price} <br>\n  <div style='font-size:0.97rem;color:#555;'>${address}<br>Amenities: ${amenities}</div>\n  <button class=\"pay-btn\" data-type=\"hotel\" data-id=\"${h.id||i}\" data-name=\"${h.name}\" data-price=\"${h.price}\" data-rating=\"${rating}\" data-address=\"${address}\" data-amenities=\"${amenities}\">Select</button>\n</div>`;
+            });
+          } else {
+            html += `<div class=\"result-card\">No hotels found.</div>`;
+          }
+          document.getElementById('results').innerHTML = html;
+          // Auto-scroll to results
+          document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Attach payment modal logic to all Select buttons
+          document.querySelectorAll('.pay-btn').forEach(btn => {
+            btn.onclick = function() {
+              const type = btn.getAttribute('data-type');
+              const name = btn.getAttribute('data-name');
+              const price = btn.getAttribute('data-price');
+              let ticket = { name, price, type };
+              if (type === 'hotel') {
+                ticket.rating = btn.getAttribute('data-rating');
+                ticket.address = btn.getAttribute('data-address');
+                ticket.amenities = btn.getAttribute('data-amenities');
+                ticket.route = btn.getAttribute('data-address');
+                ticket.time = 'Check-in: ' + (new Date().toLocaleDateString());
+                ticket.seats = 1;
+              } else {
+                ticket.route = `${from} → ${to}`;
+                ticket.time = btn.getAttribute('data-time');
+                ticket.seats = btn.getAttribute('data-seats');
+              }
+              document.getElementById('paymentModal').setAttribute('data-ticket', JSON.stringify(ticket));
+              document.getElementById('paymentModal').style.display = 'flex';
+            };
+          });
+        }
+        await fetchAndDisplay();
+        if (window.pollInterval) clearInterval(window.pollInterval);
+        window.pollInterval = setInterval(fetchAndDisplay, 5000);
+      };
+      // Clear polling when navigating away
+      window.addEventListener('beforeunload', () => { if (window.pollInterval) clearInterval(window.pollInterval); });
+      // --- Payment Modal ---
+      let paymentModal = document.getElementById('paymentModal');
+      if (!paymentModal) {
+        paymentModal = document.createElement('div');
+        paymentModal.id = 'paymentModal';
+        paymentModal.style.display = 'none';
+        paymentModal.className = 'modal-bg';
+        paymentModal.innerHTML = `<div class='payment-card'>
+    <button id='closePayModal' class='modal-close'>&times;</button>
+    <div class='payment-title'>Payment</div>
+    <div id='payDetails' style='text-align:center;margin-bottom:1rem;'></div>
+    <div class='payment-method-label'>Payment Method</div>
+    <div class='pay-tabs'>
+      <button type='button' class='pay-tab active' data-pay='card'>Card</button>
+      <button type='button' class='pay-tab' data-pay='upi'>UPI</button>
+      <button type='button' class='pay-tab' data-pay='netbank'>Net Banking</button>
+      <button type='button' class='pay-tab' data-pay='wallet'>Wallet</button>
+    </div>
+    <form id='payForm' style='width:100%;'>
+      <div class='pay-option active' data-pay='card'>
+        <input type='text' id='payName' placeholder='Name on Card' required style='width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;'>
+        <input type='text' id='payCard' placeholder='Card Number' required maxlength='16' style='width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;'>
+      </div>
+      <div class='pay-option' data-pay='upi'>
+        <input type='text' id='payUpi' placeholder='UPI ID (e.g. user@upi)' style='width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;'>
+      </div>
+      <div class='pay-option' data-pay='netbank'>
+        <input type='text' id='payBank' placeholder='Bank Name' style='width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;'>
+        <input type='text' id='payAcc' placeholder='Account Number' style='width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;'>
+      </div>
+      <div class='pay-option' data-pay='wallet'>
+        <input type='text' id='payWallet' placeholder='Wallet ID / Mobile' style='width:100%;margin-bottom:0.7rem;padding:0.6rem;border-radius:6px;border:1px solid #ddd;'>
+      </div>
+      <button type='submit' style='width:100%;background:#e67e22;color:#fff;font-weight:bold;padding:0.7rem 0;border:none;border-radius:999px;font-size:1.1rem;margin-top:0.5rem;'>Pay</button>
+      <button type='button' id='previewTicketBtn' style='width:100%;background:#fff;color:#e67e22;border:1.5px solid #e67e22;font-weight:bold;border-radius:999px;padding:0.6rem 1.5rem;font-size:1.05rem;margin-top:0.5rem;'>Preview Ticket</button>
+    </form>
+    <div id='payMsg' style='text-align:center;margin-top:0.7rem;'></div>
+  </div>`;
+        document.body.appendChild(paymentModal);
+      }
+      // Always attach close logic to the close button
+      const closePayModalBtn = document.getElementById('closePayModal') || paymentModal.querySelector('#closePayModal');
+      if (closePayModalBtn) {
+        closePayModalBtn.onclick = () => { paymentModal.style.display = 'none'; };
+      }
+      // Payment tab logic
+      paymentModal.querySelectorAll('.pay-tab').forEach(tab => {
+        tab.onclick = function() {
+          paymentModal.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          const payType = this.getAttribute('data-pay');
+          paymentModal.querySelectorAll('.pay-option').forEach(opt => {
+            if (opt.getAttribute('data-pay') === payType) opt.classList.add('active');
+            else opt.classList.remove('active');
+          });
+        };
+      });
+      // Preview Ticket button logic
+      paymentModal.querySelector('#previewTicketBtn').onclick = function(e) {
+        e.preventDefault();
+        paymentModal.style.display = 'none';
+        showTicketModal(true); // preview mode
+      };
+      // Payment form logic
+      const payForm = paymentModal.querySelector('#payForm');
+payForm.onsubmit = function(e) {
+  e.preventDefault();
+  const activeTab = paymentModal.querySelector('.pay-tab.active');
+  const payType = activeTab.getAttribute('data-pay');
+  let valid = false;
+  let payMsg = '';
+  if (payType === 'card') {
+    const name = document.getElementById('payName').value.trim();
+    const card = document.getElementById('payCard').value.trim();
+    if (name && card.length === 16 && /^\d+$/.test(card)) valid = true;
+    else payMsg = 'Enter valid card details.';
+  } else if (payType === 'upi') {
+    const upi = document.getElementById('payUpi').value.trim();
+    if (upi && upi.includes('@')) valid = true;
+    else payMsg = 'Enter valid UPI ID.';
+  } else if (payType === 'netbank') {
+    const bank = document.getElementById('payBank').value.trim();
+    const acc = document.getElementById('payAcc').value.trim();
+    if (bank && acc.length >= 6) valid = true;
+    else payMsg = 'Enter valid bank details.';
+  } else if (payType === 'wallet') {
+    const wallet = document.getElementById('payWallet').value.trim();
+    if (wallet.length > 0) valid = true;
+    else payMsg = 'Enter Wallet ID or Mobile.';
+  }
+  const payMsgDiv = paymentModal.querySelector('#payMsg');
+  if (!valid) {
+    payMsgDiv.textContent = payMsg;
+    payMsgDiv.style.color = '#c0392b';
+    return;
+  }
+  payMsgDiv.textContent = 'Processing payment...';
+  payMsgDiv.style.color = '#e67e22';
+  if (payType === 'wallet') {
+    setTimeout(() => {
+      paymentModal.style.display = 'none';
+      payMsgDiv.textContent = '';
+      showTicketModal(false); // show real ticket
+      showToast('Booking successful!', 'success');
+    }, 900);
+    return;
+  }
+  setTimeout(() => {
+    paymentModal.style.display = 'none';
+    payMsgDiv.textContent = '';
+    showTicketModal(false);
+    showToast('Booking successful!', 'success');
+  }, 900);
+};
+      // --- Ticket Modal ---
+      function showTicketModal(preview=false) {
+        let ticketModal = document.getElementById('ticketModal');
+        if (!ticketModal) {
+          ticketModal = document.createElement('div');
+          ticketModal.id = 'ticketModal';
+          ticketModal.style.position = 'fixed';
+          ticketModal.style.top = 0;
+          ticketModal.style.left = 0;
+          ticketModal.style.right = 0;
+          ticketModal.style.bottom = 0;
+          ticketModal.style.background = 'rgba(24,28,40,0.7)';
+          ticketModal.style.zIndex = 10001;
+          ticketModal.innerHTML = `<div id='ticketCard' style='background:#fff;max-width:390px;margin:7% auto;padding:2.2rem 1.5rem 1.5rem 1.5rem;border-radius:1.2rem;box-shadow:0 8px 32px 0 rgba(31,38,135,0.18);position:relative;text-align:center;'>
+  <button id='closeTicketModal' style='position:absolute;top:1rem;right:1.2rem;background:#eee;border:none;border-radius:50%;width:2rem;height:2rem;font-size:1.2rem;cursor:pointer;'>&times;</button>
+  <h3 style='color:#e67e22;margin-bottom:1rem;'>Your Ticket</h3>
+  <div id='ticketContent'></div>
+  <div style='margin:1.2rem 0 0.7rem 0;'>
+    <img id='ticketQR' src='https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=TravelGoDemoTicket' alt='QR Code' style='width:120px;height:120px;border-radius:12px;border:1px solid #eee;box-shadow:0 2px 8px #e67e2240;'>
+  </div>
+  <button id='downloadTicketBtn' style='margin-top:0.7rem;background:#e67e22;color:#fff;font-weight:bold;padding:0.7rem 1.5rem;border:none;border-radius:999px;font-size:1.1rem;'>Download Ticket</button>
+</div>`;
+          document.body.appendChild(ticketModal);
+        }
+        // Fill ticket content with demo layout
+        const ticket = JSON.parse(document.getElementById('paymentModal').getAttribute('data-ticket') || '{}');
+        const bookingId = ticket.bookingId || ('TG' + Math.floor(Math.random()*1000000).toString().padStart(6,'0'));
+        if (!preview) {
+          ticket.bookingId = bookingId;
+          ticket.date = new Date().toLocaleDateString();
+          addToHistory(ticket);
+        }
+        document.getElementById('ticketContent').innerHTML = `
+          <div style='font-size:1.2rem;margin-bottom:0.7rem;'><b>${ticket.name || 'Demo Transport'}</b> <span style='font-size:0.95rem;color:#e67e22;'>(${ticket.type?.toUpperCase() || 'BUS'})</span></div>
+          <div style='margin-bottom:0.5rem;'><b>Route:</b> ${ticket.route || 'Delhi → Mumbai'}</div>
+          <div style='margin-bottom:0.5rem;'><b>Time:</b> ${ticket.time || '09:00 → 18:00'}</div>
+          <div style='margin-bottom:0.5rem;'><b>Price:</b> ₹${ticket.price || '1800'}</div>
+          <div style='margin-bottom:0.5rem;'><b>${ticket.seats ? 'Seats' : 'Seats'}</b> ${ticket.seats || '1'}</div>
+          <div style='margin-bottom:0.5rem;'><b>Booking ID:</b> ${bookingId}</div>
+          <div style='margin-bottom:0.5rem;'><b>Passenger:</b> ${window.currentUser || 'Demo User'}</div>
+          ${preview ? `<div style='color:#e67e22;font-size:0.98rem;margin-top:0.7rem;'>This is a preview. Complete payment to confirm booking.</div>` : ''}
+        `;
+        // Set QR code to encode ticket info (for demo)
+        const qrData = encodeURIComponent(`TravelGo|${bookingId}|${ticket.name || 'Demo'}|${ticket.route || 'Delhi-Mumbai'}|${ticket.time || '09:00-18:00'}`);
+        document.getElementById('ticketQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`;
+        ticketModal.style.display = 'flex';
+        document.getElementById('closeTicketModal').onclick = () => { ticketModal.style.display = 'none'; if (preview) paymentModal.style.display = 'flex'; };
+        document.getElementById('downloadTicketBtn').onclick = () => {
+          // Download ticket as image (simple, using html2canvas if available)
+          if (window.html2canvas) {
+            html2canvas(document.getElementById('ticketCard')).then(canvas => {
+              const link = document.createElement('a');
+              link.download = 'TravelGo_Ticket.png';
+              link.href = canvas.toDataURL();
+              link.click();
+            });
+          } else {
+            alert('To download ticket as image, please include html2canvas library.');
+          }
+        };
+      }
+      // --- User Dashboard Modal ---
+      let bookingHistory = [];
+      function addToHistory(ticket) {
+        bookingHistory.unshift(ticket);
+        if (bookingHistory.length > 10) bookingHistory.pop();
+      }
+      function showDashboard() {
+        let dash = document.getElementById('dashboardModal');
+        if (!dash) {
+          dash = document.createElement('div');
+          dash.id = 'dashboardModal';
+          dash.style.position = 'fixed';
+          dash.style.top = 0;
+          dash.style.left = 0;
+          dash.style.right = 0;
+          dash.style.bottom = 0;
+          dash.style.background = 'rgba(24,28,40,0.7)';
+          dash.style.zIndex = 10010;
+          dash.innerHTML = `<div style='background:#fff;max-width:480px;margin:6% auto;padding:2.2rem 1.5rem 1.5rem 1.5rem;border-radius:1.2rem;box-shadow:0 8px 32px 0 rgba(31,38,135,0.18);position:relative;'>
+  <button id='closeDashModal' style='position:absolute;top:1rem;right:1.2rem;background:#eee;border:none;border-radius:50%;width:2rem;height:2rem;font-size:1.2rem;cursor:pointer;'>&times;</button>
+  <h3 style='color:#e67e22;text-align:center;margin-bottom:1rem;'>My Bookings</h3>
+  <div id='dashContent'></div>
+</div>`;
+          document.body.appendChild(dash);
+        }
+        let content = '';
+        if (bookingHistory.length === 0) {
+          content = `<div style='text-align:center;color:#888;'>No previous bookings yet.</div>`;
+        } else {
+          content = bookingHistory.map(t => `
+            <div style='border-bottom:1px solid #eee;padding:0.7rem 0;'>
+              <b>${t.name}</b> (${t.type?.toUpperCase()})<br>
+              <span style='color:#e67e22;'>${t.route}</span><br>
+              <span>${t.time}</span><br>
+              <b>Price:</b> ₹${t.price} &nbsp; <b>Seats:</b> ${t.seats}<br>
+              <b>Booking ID:</b> ${t.bookingId}<br>
+              <span style='font-size:0.95rem;color:#555;'>${t.date || ''}</span>
+            </div>
+          `).join('');
+        }
+        document.getElementById('dashContent').innerHTML = content;
+        dash.style.display = 'flex';
+        document.getElementById('closeDashModal').onclick = () => { dash.style.display = 'none'; };
+      }
+      // Add dashboard button to header when logged in
+      function updateUserArea() {
+        if (currentUser) {
+          document.getElementById('userArea').innerHTML = `<span class='user-greet'>Welcome, ${currentUser}!</span><button class='logout-btn' id='logoutBtn'>Logout</button><button class='login-btn' id='dashboardBtn' style='margin-left:0.7rem;background:#fff;color:#e67e22;border:1px solid #e67e22;'>Dashboard</button>`;
+          document.getElementById('logoutBtn').onclick = () => { currentUser = null; updateUserArea(); };
+          document.getElementById('dashboardBtn').onclick = showDashboard;
+        } else {
+          document.getElementById('userArea').innerHTML = `<button class='login-btn' id='openLoginBtn'>Login</button>`;
+          document.getElementById('openLoginBtn').onclick = openLoginBtn.onclick;
+        }
+      }
+      // Patch login/register to use updateUserArea
+      loginFormModal.onsubmit = async (e) => {
+        e.preventDefault();
+        loginModalMessage.textContent = 'Logging in...';
+        const email = document.getElementById('login_email').value;
+        const password = document.getElementById('login_password').value;
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+        const res = await fetch('/login', { method: 'POST', body: formData });
+        if (res.ok) {
+          const data = await res.json().catch(()=>({}));
+          currentUser = data.first_name || email;
+          updateUserArea();
+          loginModal.style.display = 'none';
+        } else {
+          loginModalMessage.innerHTML = `<span class='error-msg'>Not a valid user. Please check your credentials.</span>`;
+        }
+      };
+      registerFormModal.onsubmit = async (e) => {
+        e.preventDefault();
+        loginModalMessage.textContent = 'Registering...';
+        const email = document.getElementById('register_email').value;
+        const password = document.getElementById('register_password').value;
+        const first_name = document.getElementById('register_firstname').value;
+        const last_name = document.getElementById('register_lastname').value;
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('first_name', first_name);
+        formData.append('last_name', last_name);
+        const res = await fetch('/register', { method: 'POST', body: formData });
+        if (res.ok) {
+          loginModalMessage.innerHTML = `<span class='success-msg'>Hi ${first_name}, your account has been created! Please login.</span>`;
+          tabLogin.click();
+        } else {
+          const err = await res.json().catch(()=>({}));
+          loginModalMessage.innerHTML = `<span class='error-msg'>${err.detail || 'Registration failed.'}</span>`;
+        }
+      };
+      // Save booking to history on payment
+      function showTicketModal(preview=false) {
+        let ticketModal = document.getElementById('ticketModal');
+        if (!ticketModal) {
+          ticketModal = document.createElement('div');
+          ticketModal.id = 'ticketModal';
+          ticketModal.style.position = 'fixed';
+          ticketModal.style.top = 0;
+          ticketModal.style.left = 0;
+          ticketModal.style.right = 0;
+          ticketModal.style.bottom = 0;
+          ticketModal.style.background = 'rgba(24,28,40,0.7)';
+          ticketModal.style.zIndex = 10001;
+          ticketModal.innerHTML = `<div id='ticketCard' style='background:#fff;max-width:390px;margin:7% auto;padding:2.2rem 1.5rem 1.5rem 1.5rem;border-radius:1.2rem;box-shadow:0 8px 32px 0 rgba(31,38,135,0.18);position:relative;text-align:center;'>
+  <button id='closeTicketModal' style='position:absolute;top:1rem;right:1.2rem;background:#eee;border:none;border-radius:50%;width:2rem;height:2rem;font-size:1.2rem;cursor:pointer;'>&times;</button>
+  <h3 style='color:#e67e22;margin-bottom:1rem;'>Your Ticket</h3>
+  <div id='ticketContent'></div>
+  <div style='margin:1.2rem 0 0.7rem 0;'>
+    <img id='ticketQR' src='https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=TravelGoDemoTicket' alt='QR Code' style='width:120px;height:120px;border-radius:12px;border:1px solid #eee;box-shadow:0 2px 8px #e67e2240;'>
+  </div>
+  <button id='downloadTicketBtn' style='margin-top:0.7rem;background:#e67e22;color:#fff;font-weight:bold;padding:0.7rem 1.5rem;border:none;border-radius:999px;font-size:1.1rem;'>Download Ticket</button>
+</div>`;
+          document.body.appendChild(ticketModal);
+        }
+        // Fill ticket content with demo layout
+        const ticket = JSON.parse(document.getElementById('paymentModal').getAttribute('data-ticket') || '{}');
+        const bookingId = ticket.bookingId || ('TG' + Math.floor(Math.random()*1000000).toString().padStart(6,'0'));
+        ticket.bookingId = bookingId;
+        ticket.date = new Date().toLocaleDateString();
+        addToHistory(ticket);
+        document.getElementById('ticketContent').innerHTML = `
+          <div style='font-size:1.2rem;margin-bottom:0.7rem;'><b>${ticket.name || 'Demo Transport'}</b> <span style='font-size:0.95rem;color:#e67e22;'>(${ticket.type?.toUpperCase() || 'BUS'})</span></div>
+          <div style='margin-bottom:0.5rem;'><b>Route:</b> ${ticket.route || 'Delhi → Mumbai'}</div>
+          <div style='margin-bottom:0.5rem;'><b>Time:</b> ${ticket.time || '09:00 → 18:00'}</div>
+          <div style='margin-bottom:0.5rem;'><b>Price:</b> ₹${ticket.price || '1800'}</div>
+          <div style='margin-bottom:0.5rem;'><b>${ticket.seats ? 'Seats' : 'Seats'}</b> ${ticket.seats || '1'}</div>
+          <div style='margin-bottom:0.5rem;'><b>Booking ID:</b> ${bookingId}</div>
+          <div style='margin-bottom:0.5rem;'><b>Passenger:</b> ${window.currentUser || 'Demo User'}</div>
+        `;
+        // Set QR code to encode ticket info (for demo)
+        const qrData = encodeURIComponent(`TravelGo|${bookingId}|${ticket.name || 'Demo'}|${ticket.route || 'Delhi-Mumbai'}|${ticket.time || '09:00-18:00'}`);
+        document.getElementById('ticketQR').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`;
+        ticketModal.style.display = 'flex';
+        document.getElementById('closeTicketModal').onclick = () => { ticketModal.style.display = 'none'; };
+        document.getElementById('downloadTicketBtn').onclick = () => {
+          // Download ticket as image (simple, using html2canvas if available)
+          if (window.html2canvas) {
+            html2canvas(document.getElementById('ticketCard')).then(canvas => {
+              const link = document.createElement('a');
+              link.download = 'TravelGo_Ticket.png';
+              link.href = canvas.toDataURL();
+              link.click();
+            });
+          } else {
+            alert('To download ticket as image, please include html2canvas library.');
+          }
+        };
+      }
+    </script>
+  </body>
+</html>
